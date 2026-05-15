@@ -13,20 +13,22 @@
         :root {
             --primary-color: #0b9a91;
             --secondary-color: #534741;
-            --bg-color: #cbd5e1;
+            --bg-color: #f1f5f9;
             --white: #ffffff;
             --danger-color: #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Dubai', sans-serif; }
-        body { background-color: var(--bg-color); display: flex; flex-direction: column; min-height: 100vh; }
+        body { background-color: #cbd5e1; display: flex; flex-direction: column; min-height: 100vh; }
 
+        /* لوحة التحكم */
         .controls-panel {
             width: 100%; background: var(--white); padding: 1.5rem;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 1rem;
+            z-index: 10;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 992px) {
             body { flex-direction: row; }
             .controls-panel { width: 380px; height: 100vh; overflow-y: auto; position: sticky; top: 0; }
         }
@@ -42,18 +44,25 @@
         label { font-weight: 600; font-size: 0.9rem; color: var(--secondary-color); }
         input, textarea, select { padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 16px; width: 100%; }
 
-        .btn-print { background-color: var(--primary-color); color: var(--white); border: none; padding: 1rem; border-radius: 10px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .btn-print { background-color: var(--primary-color); color: var(--white); border: none; padding: 1rem; border-radius: 10px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .btn-print:hover { background-color: #087a73; }
 
+        /* السجل */
         .history-section { margin-top: 2rem; border-top: 2px solid #f1f5f9; padding-top: 1rem; }
         .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .history-title { font-weight: 700; font-size: 1rem; color: var(--secondary-color); }
         .btn-clear-all { background: none; border: none; color: var(--danger-color); font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
         .history-list { display: flex; flex-direction: column; gap: 8px; }
-        .history-item { padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
+        .history-item { padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
         .btn-delete-item { background: #fee2e2; color: var(--danger-color); border: none; width: 24px; height: 24px; border-radius: 6px; cursor: pointer; }
 
+        /* منطقة المعاينة */
         .preview-area { flex: 1; padding: 40px 20px; display: flex; justify-content: center; align-items: flex-start; overflow: auto; background: #94a3b8; }
-        .snippet-container { background-color: var(--white); position: relative; display: flex; flex-direction: column; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); }
+        
+        /* القصاصة */
+        .snippet-container { background-color: var(--white); position: relative; display: flex; flex-direction: column; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); transition: all 0.3s ease; }
+        
+        /* مقاسات دقيقة */
         .size-a6 { width: 10.5cm; height: 14.8cm; }
         .size-square { width: 12cm; height: 12cm; }
         .size-a5 { width: 14.8cm; height: 21cm; }
@@ -64,7 +73,7 @@
         .theme-turquoise .snippet-title::after { background-color: rgba(255,255,255,0.4); }
 
         .snippet-content { padding: 1.2cm; height: 100%; display: flex; flex-direction: column; }
-        .logo-header { text-align: center; margin-bottom: 0.8rem; margin-top: -0.8cm; }
+        .logo-header { text-align: center; margin-bottom: 0.8rem; margin-top: -0.5cm; }
         .logo-img { max-width: 65px; height: auto; }
         
         .snippet-title { 
@@ -77,8 +86,6 @@
         }
 
         .desc-container { flex: 1; overflow: hidden; display: flex; align-items: flex-start; }
-        
-       
         .snippet-desc { 
             width: 100%; 
             line-height: 1.8; 
@@ -90,13 +97,29 @@
 
         .snippet-footer { margin-top: auto; padding-top: 1rem; border-top: 1.5px solid #f1f5f9; text-align: center; }
         .footer-org { font-weight: 700; font-size: 1.05rem; }
-        .footer-date { font-size: 0.9rem; width: 100%; text-align: center; margin-top: 5px; }
 
+        /* حل مشكلة الطباعة */
         @media print {
-            @page { size: A4 portrait; margin: 0; }
+            @page { margin: 0; size: auto; }
+            body { background: white !important; }
             .controls-panel { display: none !important; }
-            .preview-area { padding: 0; display: block; background: none; }
-            .snippet-container { box-shadow: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(1); border: 1px dashed #bbb; }
+            .preview-area { padding: 0 !important; margin: 0 !important; background: none !important; display: block !important; overflow: visible !important; }
+            
+            /* تمييز الحاوية عند الطباعة لمنع التقسيم */
+            .snippet-container { 
+                box-shadow: none !important; 
+                position: absolute !important; 
+                left: 50% !important; 
+                top: 50% !important; 
+                transform: translate(-50%, -50%) !important; 
+                border: 0.5px solid #eee !important;
+                page-break-inside: avoid !important;
+                page-break-after: avoid !important;
+            }
+
+            .size-a5 { width: 148mm !important; height: 210mm !important; }
+            .size-a6 { width: 105mm !important; height: 148mm !important; }
+            .size-square { width: 120mm !important; height: 120mm !important; }
         }
     </style>
 </head>
@@ -121,7 +144,7 @@
             <select id="select-size">
                 <option value="size-a6">A6 (ربع صفحة)</option>
                 <option value="size-square">مربع (12x12 سم)</option>
-                <option value="size-a5">A5 (نصف صفحة)</option>
+                <option value="size-a5" selected>A5 (نصف صفحة)</option>
             </select>
         </div>
 
@@ -135,7 +158,7 @@
             <textarea id="input-desc" rows="5" placeholder="اكتب المحتوى هنا..."></textarea>
         </div>
 
-        <button class="btn-print" id="print-trigger">  حفظ وتصدير </button>
+        <button class="btn-print" id="print-trigger">💾 حفظ وطباعة</button>
 
         <div class="history-section">
             <div class="history-header">
@@ -147,7 +170,7 @@
     </aside>
 
     <main class="preview-area">
-        <div class="snippet-container size-a6 theme-white" id="snippet-box">
+        <div class="snippet-container size-a5 theme-white" id="snippet-box">
             <div class="snippet-content">
                 <div class="logo-header">
                     <img src="bso.png" alt="Logo" class="logo-img">
@@ -200,7 +223,7 @@
             };
             let history = JSON.parse(localStorage.getItem('bso_history') || '[]');
             history.unshift(snippetData);
-            localStorage.setItem('bso_history', JSON.stringify(history));
+            localStorage.setItem('bso_history', JSON.stringify(history.slice(0, 20))); // حفظ آخر 20 فقط للأداء
             renderHistory();
         }
 
@@ -225,9 +248,9 @@
             const history = JSON.parse(localStorage.getItem('bso_history') || '[]');
             displays.history.innerHTML = history.map(item => `
                 <div class="history-item" onclick="loadSnippetById(${item.id})">
-                    <div class="item-content">
-                        <strong>${item.title || '(بدون عنوان)'}</strong>
-                        <span class="item-date">${item.timestamp}</span>
+                    <div class="item-content" style="flex:1">
+                        <strong>${item.title || '(بدون عنوان)'}</strong><br>
+                        <small style="color:#64748b">${item.timestamp}</small>
                     </div>
                     <button class="btn-delete-item" onclick="deleteItem(${item.id}, event)">×</button>
                 </div>
@@ -245,7 +268,7 @@
             displays.title.textContent = item.title;
             displays.desc.textContent = item.desc;
             displays.box.className = `snippet-container ${item.size} ${item.theme}`;
-            updateFontSize();
+            setTimeout(updateFontSize, 50);
         };
 
         inputs.title.addEventListener('input', (e) => displays.title.textContent = e.target.value);
@@ -253,10 +276,12 @@
             displays.desc.textContent = e.target.value;
             updateFontSize();
         });
+        
         inputs.theme.addEventListener('change', () => displays.box.className = `snippet-container ${inputs.size.value} ${inputs.theme.value}`);
+        
         inputs.size.addEventListener('change', () => {
             displays.box.className = `snippet-container ${inputs.size.value} ${inputs.theme.value}`;
-            setTimeout(updateFontSize, 300);
+            setTimeout(updateFontSize, 100);
         });
 
         document.getElementById('print-trigger').addEventListener('click', () => {
